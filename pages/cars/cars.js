@@ -1,6 +1,6 @@
 import { API_URL } from "../../settings.js"
 import { handleHttpErrors,sanitizeStringWithTableRows } from "../../utils.js"
-const URL = API_URL + "/cars/admin"
+const URL = API_URL + "/cars/adminnnn"
 
 export async function initCars() {
 
@@ -22,12 +22,8 @@ export async function initCars() {
     const safeRows = sanitizeStringWithTableRows(carRows);
     document.getElementById("table-rows").innerHTML = safeRows
   } catch (err) {
-    if (err.apiError) {
-      document.getElementById("error").innerText = err.apiError.message
-    } else {
       document.getElementById("error").innerText = err.message
       console.error(err.message)
     }
   }
-}
 
