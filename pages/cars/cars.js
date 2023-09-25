@@ -1,29 +1,21 @@
 import { API_URL } from "../../settings.js"
-import { handleHttpErrors,sanitizeStringWithTableRows } from "../../utils.js"
-const URL = API_URL + "/cars/adminnnn"
+const URL = API_URL + "/cars/admin"
+import {sanitizeStringWithTableRows,handleHttpErrors} from "../../utils.js"
 
 export async function initCars() {
+  //const cars = await fetch(URL).then((res)=>handleHttpErrors(res))
+  const cars = await fetch(URL).then(res => res.json())
 
-  try {
-    const cars = await fetch(URL).then(handleHttpErrors)
-    //document.getElementById("table-rows").onclick = gotoToAddEditView
-    const carRows = cars.map(car => `
-<tr>
-<td>${car.id}</td>
-<td>${car.brand}</td>
-<td>${car.model}</td>
-<td>${car.pricePrDay}</td>
-<td>${car.bestDiscount}</td>
-<td><button id="${car.id}_column-id" class="btn btn-sm btn-secondary">Edit/delete</button> </td>      
-</tr>
-`).join("\n")
+  const tableRows = cars.map(car => `
+  <tr>
+  <td>${car.id}</td>
+  <td>${car.brand}</td>
+  <td>${car.model}</td>
+  <td>${car.pricePrDay}</td>
+  <td>${car.bestDiscount}</td>
+  </tr>
+  `)
+  const tableRowsAsStr = tableRows.join("")
 
-    //You should ALWAYS do this from now on
-    const safeRows = sanitizeStringWithTableRows(carRows);
-    document.getElementById("table-rows").innerHTML = safeRows
-  } catch (err) {
-      document.getElementById("error").innerText = err.message
-      console.error(err.message)
-    }
-  }
-
+  document.getElementById("table-rows").innerHTML = sanitizeStringWithTableRows(tableRowsAsStr)
+}
