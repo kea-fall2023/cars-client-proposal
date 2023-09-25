@@ -7,7 +7,7 @@ const URL = API_URL + "/cars"
 let carIdInput
 let carUsernameInput
 let carReservationDate
-let cars;
+let cars = [];
 export async function initReservation() {
 
   //Initialize nodes used more than once
@@ -18,14 +18,16 @@ export async function initReservation() {
   try {
     //Store cars, so we later can get the selected one to reserve
     cars = await fetch(URL).then(handleHttpErrors)
-    document.getElementById("table-rows").onclick = setupReservationModal
+    document.getElementById("table-rows").addEventListener("click",setupReservationModal)
     const carRows = cars.map(car => `
   <tr>
   <td>${car.id}</td>
   <td>${car.brand}</td>
   <td>${car.model}</td>
   <td>${car.pricePrDay}</td>
-  <td><button id="${car.id}_car-id" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#reservation-modal">Reserve car</button> </td>      
+  <td>
+  <button id="${car.id}_car-id" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#reservation-modal">Reserve car
+  </button> </td>      
   </tr>
   `).join("\n")
 
@@ -46,6 +48,7 @@ async function setupReservationModal(evt) {
   if (!btn.id.includes("_car-id")) {
     return //Not a reserve button that was clicked
   }
+
   const id = btn.id.split("_")[0]
   const carToRent = cars.find(car => car.id == id)
   const headerText = `Reserve car: (${carToRent.id}), ${carToRent.brand}, ${carToRent.model}, price: ${carToRent.pricePrDay}`
@@ -55,7 +58,7 @@ async function setupReservationModal(evt) {
   carUsernameInput.value = ""
   carReservationDate.value = ""
   setStatusMsg("", false)
-  document.getElementById("btn-reservation").onclick = reserveCar
+  document.getElementById("btn-reservation").addEventListener("click", reserveCar)
 }
 
 async function reserveCar() {
