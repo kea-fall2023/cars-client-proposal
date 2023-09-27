@@ -9,7 +9,7 @@ import { initReservation } from "./pages/reservation/reserve.js"
 import { initMembers } from "./pages/members/members.js"
 import { initCars } from "./pages/cars/cars.js"
 import { initAddCar } from "./pages/addCar/addCar.js"
-import { initLogin } from "./pages/login/login.js"
+import { initLogin, logout,toggleLoginStatus } from "./pages/login/login.js"
 import { initSignup } from "./pages/signup/signup.js"
 import { initFindEditCar } from "./pages/findEditCar/findEditCar.js"
 import { initListReservationsAll } from "./pages/showReservations/reservations.js"
@@ -26,6 +26,10 @@ window.addEventListener("load", async () => {
   const templateReservations = await loadHtml("./pages/showReservations/reservations.html")
   const templateNotFound = await loadHtml("./pages/notFound/notFound.html")
 
+  //If token existed, for example after a refresh, set UI accordingly
+  const token = localStorage.getItem("token")
+  toggleLoginStatus(token)
+  
  const router = new Navigo("/", { hash: true });
   //Not especially nice, BUT MEANT to simplify things. Make the router global so it can be accessed from all js-files
   window.router = router
@@ -74,10 +78,15 @@ window.addEventListener("load", async () => {
         renderHtml(templateSignup, "content")
         initSignup()
       },
-      "/login": (match) => {
+      "/login": () => {
         renderHtml(templateLogin, "content")
         initLogin()
+      },
+      "/logout": () => {
+        renderHtml(templateLogin, "content")
+        logout()
       }
+
     })
     .notFound(() => {
       renderHtml(templateNotFound, "content")
