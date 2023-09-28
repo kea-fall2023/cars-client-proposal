@@ -67,6 +67,24 @@ export async function handleHttpErrors(res) {
  return res.json()
 }
 
+export function makeOptions(method, body, addToken) {
+  const opts = {
+    method: method,
+    headers: {
+      "Content-type": "application/json",
+      "Accept": "application/json"
+    }
+  }
+  if (body) {
+    opts.body = JSON.stringify(body);
+  }
+   if (addToken && localStorage.getItem("token")) {
+    opts.headers.Authorization = "Bearer " + localStorage.getItem("token")
+  }
+  return opts;
+}
+
+
 
 /**
  * Table-rows are required to be inside a table tag, so use this small utility function to santitize a string with TableRows only 

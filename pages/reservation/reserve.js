@@ -1,7 +1,7 @@
 
 import { API_URL} from "../../settings.js"
 import { handleHttpErrors } from "../../utils.js"
-import { sanitizeStringWithTableRows } from "../../utils.js"
+import { sanitizeStringWithTableRows,makeOptions } from "../../utils.js"
 const URL = API_URL + "/cars"
 
 let carIdInput
@@ -62,16 +62,13 @@ async function setupReservationModal(evt) {
 }
 
 async function reserveCar() {
-  const URL = API_URL + "/reservations"
+  const URL = API_URL + "/reservations/v2"
   const reservationRequest = {
     carId : carIdInput.value,
-    userName : carUsernameInput.value,
+    //userName : carUsernameInput.value,
     date : carReservationDate.value
   }
-  const fetchOptions = {}
-  fetchOptions.method = "POST"
-  fetchOptions.headers = { "Content-Type": "application/json" }
-  fetchOptions.body = JSON.stringify(reservationRequest)
+  const fetchOptions = makeOptions("POST",reservationRequest,true)
   try {
     await fetch(URL, fetchOptions).then(handleHttpErrors)
     setStatusMsg("Car was successfully reserved, enter a new date, or press close", false)
